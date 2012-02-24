@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: file.py
-# $Date: Sat Feb 25 00:06:29 2012 +0800
+# $Date: Sat Feb 25 07:49:16 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 __all__ = ['FileFinder']
@@ -78,14 +78,12 @@ class FileFinder(ResfinderBase):
         if os.path.isfile(fpath):
             return
         logging.info(u'downloading file {0} ...'.format(fname))
-        with open(fpath, 'w') as f:
-            data = resp.read()
-            f.write(data)
 
+        data = resp.read()
         if flen != len(data):
-            os.remove(fpath)
             raise ValueError(u'error while downloading {0}'.format(fname))
 
+        with open(fpath, 'w') as f:
+            f.write(data)
         self._sumwrt(fname)
-
 

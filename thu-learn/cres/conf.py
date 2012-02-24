@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: conf.py
-# $Date: Sat Feb 25 00:07:57 2012 +0800
+# $Date: Sat Feb 25 07:55:33 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 import re
@@ -12,7 +12,7 @@ COURSE_LIST_URL = '/MultiLanguage/lesson/student/MyCourse.jsp?language=cn'
 COURSE_URL_REGEX = re.compile(r'^.*MultiLanguage/lesson/student/' \
         'course_locate.jsp\?course_id=(.*)$')
 
-COURSE_NAME_REGEX = re.compile(r'^([^(]*)\(.*\)$')
+COURSE_NAME_REGEX = re.compile(r'^(.*)\([0-9]*\)\([^)]*\)$')
 
 DOWNLOAD_URL_REGEX = re.compile(r'^/uploadFile/downloadFile_student.jsp\?.*$')
 

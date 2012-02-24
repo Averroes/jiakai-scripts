@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: __init__.py
-# $Date: Sat Feb 25 00:13:32 2012 +0800
+# $Date: Sat Feb 25 07:54:42 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 __all__ = ['main']
@@ -64,7 +64,7 @@ class Course(object):
         ret = list()
         br.open(conf.COURSE_LIST_URL)
         for i in br.links(url_regex = conf.COURSE_URL_REGEX):
-            ret.append(Course(i.url, i.text))
+            ret.append(Course(i.url, i.text.strip()))
         return ret
 
 
