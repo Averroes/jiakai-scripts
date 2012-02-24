@@ -1,3 +1,7 @@
+# src dst <is git?>
 ../thu-syllabus/syllabus.py thu-syllabus2ical.py
+../thu-learn thu-learn 1
 $HOME/.vim vim
 $HOME/.vimrc vimrc
+
+# vim: ft=conf
