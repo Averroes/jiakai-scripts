@@ -1,0 +1,3 @@
+-- $File: header.hs
+-- $Date: Thu Jan 05 15:18:36 2012 +0800
+-- $Author: jiakai <jia.kai66@gmail.com>
