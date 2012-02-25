@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: assignment.py
-# $Date: Sat Feb 25 01:23:11 2012 +0800
+# $Date: Sat Feb 25 17:55:30 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 __all__ = ['AssignmentFinder']
@@ -36,4 +36,4 @@ class AssignmentFinder(ResfinderBase):
             if today >= stime and today <= ttime and \
                     cols[3].string.strip() == u'尚未提交':
                 sumwrt(cols[0].string + u'  （剩余{0}天）'.format(
-                    (ttime - stime).days))
+                    (ttime - today).days))
