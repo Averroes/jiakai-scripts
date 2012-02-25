@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: __init__.py
-# $Date: Sat Feb 25 07:54:42 2012 +0800
+# $Date: Sat Feb 25 08:52:28 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 __all__ = ['main']
@@ -14,6 +14,8 @@ import mechanize
 from cres.resfinder import *
 from cres.lib import SummaryWriter
 from cres import conf
+
+RESFINDER_LIST = [NotifyFinder, FileFinder, AssignmentFinder]
 
 def fix_mechanize():
     from mechanize import _pullparser
@@ -119,10 +121,20 @@ def update_all_course(ignore):
     sumwrt = SummaryWriter()
     for i in courses:
         if i.id in ignore:
+            logging.warn(u'course {0} is ignored'.format(i.name))
             continue
+
+        res_list = list()
+        for j in range(len(RESFINDER_LIST)):
+            if '{0}.{1}'.format(i.id, j) in ignore:
+                logging.warn(u'resource finder {0} for ' \
+                        'course {1} is ignored'.format(
+                            RESFINDER_LIST[j].__name__, i.name))
+            else:
+                res_list.append(RESFINDER_LIST[j])
+
         logging.info(u'getting updates for course {0} ...'.format(i.name))
-        i.update(br, sumwrt.indent(u'{0}-{1}:'.format(i.id, i.name)),
-                [NotifyFinder, FileFinder, AssignmentFinder])
+        i.update(br, sumwrt.indent(u'{0}-{1}:'.format(i.id, i.name)), res_list)
 
 
     print u'总览：'
@@ -142,10 +154,25 @@ def additional_output():
         f.write(NotifyFinder.all2html())
     print u'课程公告已写入 ' + fpath
 
+
+def usage():
+    print >> sys.stderr, \
+            'usage: {0} <output directory> [ignore_term ...]'.\
+            format(sys.argv[0])
+    print >> sys.stderr, \
+    """
+    ignore_term=course_id|course_id.resfinder_id
+        ignore the course whose id is course_id, or a specific resource in this course
+        available resource finders:
+            resfinder_id  resource finder name"""
+    for i in range(len(RESFINDER_LIST)):
+        print >> sys.stderr, "{0}{1:<12}  {2}".format(' ' * 12, i,
+                RESFINDER_LIST[i].__name__)
+    sys.exit()
+
 def main():
     if len(sys.argv) == 1:
-        sys.exit('usage: {0} <output directory> ' \
-                '[list of ids of courses to be ignored]'.format(sys.argv[0]))
+        usage()
     conf.OUTPUT_DIR = sys.argv[1]
     init()
     update_all_course(set(sys.argv[2:]))
