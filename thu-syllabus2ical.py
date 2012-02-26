@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: syllabus.py
-# $Date: Sat Feb 18 16:56:18 2012 +0800
+# $Date: Sun Feb 26 18:35:27 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 #
 # Copyright (C) 2012 Kai Jia <jia.kai66@gmail.com>
@@ -158,7 +158,7 @@ class Course(object):
 
 
     _LOCATION_LIST = (u'楼', u'教', u'中心', u'馆', u'院',
-            u'厅', u'房', u'堂', u'基地', u'操场')
+            u'厅', u'房', u'堂', u'基地', u'操场', u'FIT')
     @classmethod
     def _is_location(cls, val):
         for i in cls._LOCATION_LIST:
