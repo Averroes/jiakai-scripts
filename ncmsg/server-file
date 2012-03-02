@@ -1,6 +1,6 @@
 #!/bin/bash 
-# $File: server-file.sh
-# $Date: Sat Mar 03 00:00:45 2012 +0800
+# $File: server-file
+# $Date: Sat Mar 03 00:09:35 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 . $(dirname $0)/config
@@ -11,4 +11,4 @@ then
 	exit -1
 fi
 
-socat -u tcp-l:$PORT create:$1 
+socat -u tcp-l:$PORT_FILE create:$1 
