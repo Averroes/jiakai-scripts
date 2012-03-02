@@ -1,0 +1,14 @@
+#!/bin/bash 
+# $File: server-file.sh
+# $Date: Sat Mar 03 00:00:45 2012 +0800
+# $Author: jiakai <jia.kai66@gmail.com>
+
+. $(dirname $0)/config
+
+if [ -z "$1" ]
+then
+	echo "Usage: $0 <output file path>"
+	exit -1
+fi
+
+socat -u tcp-l:$PORT create:$1 

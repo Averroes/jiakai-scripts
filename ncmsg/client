@@ -1,0 +1,11 @@
+#!/bin/bash
+
+. $(dirname $0)/config
+
+if [ -z "$1" -o -z "$2" ]
+then
+	echo "Usage: $0 <server addr> <msg content>"
+	exit -1
+fi
+
+echo "$USER: $2" | socat -u - tcp:$1:$PORT

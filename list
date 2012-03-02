@@ -3,5 +3,6 @@
 ../thu-learn thu-learn 1
 $HOME/.vim vim
 $HOME/.vimrc vimrc
+$HOME/script/ncmsg
 
 # vim: ft=conf

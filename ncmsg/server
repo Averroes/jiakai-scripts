@@ -1,0 +1,11 @@
+#!/bin/bash -
+
+. $(dirname $0)/config
+TIMEOUT=1000
+
+socat -u tcp-l:$PORT,reuseaddr,fork - | \
+	while read line
+	do
+		echo "$(date +%T) $line"
+		notify-send -t $TIMEOUT "$line"
+	done
