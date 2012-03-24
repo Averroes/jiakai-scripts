@@ -1,5 +1,5 @@
 # $File: project.make
-# $Date: Mon Jun 13 09:44:13 2011 +0800
+# $Date: Sat Mar 24 11:46:52 2012 +0800
 
 OBJ_DIR = obj
 TARGET = <++>
@@ -18,7 +18,7 @@ OBJS = $(addprefix $(OBJ_DIR)/,$(CXXSOURCES:.cpp=.o))
 DEPFILES = $(OBJS:.o=.d)
 
 
-.PHONY: all clean run hg
+.PHONY: all clean run 
 
 all: $(TARGET)
 
@@ -42,11 +42,6 @@ clean:
 	rm -rf $(OBJ_DIR) $(TARGET)
 
 run: $(TARGET)
-	./$(TARGET) bell.wav 100
-
-hg:
-	hg addremove
-	hg commit -u jiakai
-	hg push
+	./$(TARGET)
 
 # vim: ft=make

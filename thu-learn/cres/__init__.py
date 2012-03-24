@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: __init__.py
-# $Date: Sat Feb 25 08:52:28 2012 +0800
+# $Date: Sat Mar 24 12:17:08 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 __all__ = ['main']
@@ -28,6 +28,17 @@ def fix_mechanize():
 
     t.get_text = get_text_unicode
 
+
+def fix_ssl_version():
+    import ssl
+
+    orig_wrap_socket = ssl.wrap_socket
+
+    def wrap_socket(*args, **kargs):
+        kargs['ssl_version'] = ssl.PROTOCOL_SSLv3
+        return orig_wrap_socket(*args, **kargs)
+
+    ssl.wrap_socket = wrap_socket
 
 class Course(object):
     """representing a course"""
@@ -113,6 +124,7 @@ def init():
     model.init()
 
     fix_mechanize()
+    fix_ssl_version()
 
 def update_all_course(ignore):
     """*ignore* is a set of course ids to be ignored"""

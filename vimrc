@@ -1,5 +1,5 @@
 " $File: .vimrc
-" $Date: Tue Jan 31 22:27:28 2012 +0800
+" $Date: Sat Mar 24 11:45:58 2012 +0800
 " $Author: Jiakai <jia.kai66@gmail.com>
 "
 " Features:
@@ -113,11 +113,15 @@ if !exists("g:__vimrc__loaded__")
 	" make related end
 
 
-	" run current file
-	command -buffer R execute "!" . expand('%:p:r')
+	" execute current file
+	command R execute "!" . expand('%:p:r')
 
-	" lookup word
-	map L :execute "!sdcv " . expand("<cword>") <CR>
+	" lookup the word under cursor using sdcv
+	fun LookUpWord()
+		let cmd = "sdcv " . expand("<cword>") . " 2>&1 | less"
+		execute '!' . cmd
+	endfun
+	map L :call LookUpWord() <CR>
 
 	" move cursor in insert mode
 	inoremap <c-h> <Left>
@@ -125,7 +129,7 @@ if !exists("g:__vimrc__loaded__")
 	inoremap <c-k> <Up>
 	inoremap <c-l> <Right>
 	inoremap <c-e> <End>
-	imap <C-z> <Plug>IMAP_JumpForward
+	imap <c-x> <Plug>IMAP_JumpForward
 		" IMAP_JumpForward uses c-j by default
 
 	" move cursor between the displayed lines instead of the physical lines
@@ -143,10 +147,11 @@ if !exists("g:__vimrc__loaded__")
 	set shiftwidth=4
 	set softtabstop=4
 	set tabstop=4
-	set fileencodings=ucs-bom,utf-8,gb2312,gbk,iso-8859
+	set fileencodings=utf-8,gb2312,gbk,iso-8859,ucs-bom
 	set nobackup
 	set title
 	set ruler
+	set wildmenu
 
 	" Make p in Visual mode replace the selected text with the "" register.
 	vnoremap p :let current_reg = @"gvs=current_reg
