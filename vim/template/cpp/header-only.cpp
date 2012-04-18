@@ -1,6 +1,9 @@
 /*
  * $File: header-only.cpp
- * $Date: Wed Jul 13 17:12:55 2011 +0800
+ * $Date: Sun Mar 25 00:39:25 2012 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
+<++>
+
+// vim: syntax=cpp.doxygen

@@ -1,5 +1,5 @@
 " $File: .vimrc
-" $Date: Sat Mar 24 11:45:58 2012 +0800
+" $Date: Sun Apr 01 15:29:46 2012 +0800
 " $Author: Jiakai <jia.kai66@gmail.com>
 "
 " Features:
@@ -45,6 +45,9 @@ if !exists("g:__vimrc__loaded__")
 		execute '1,' . l . 'substitute/' . '^\([^a-zA-Z]*\$File:\).*$' . '/\1 ' . expand('<afile>:t') . '/e'
 		call setpos('.', save_cursor)
 	endfun
+
+	" line break for Chinese
+	set formatoptions+=m
 
 	" enable file type detection, and load corresponding plugin and indent
 	" files
@@ -128,8 +131,9 @@ if !exists("g:__vimrc__loaded__")
 	inoremap <c-j> <Down>
 	inoremap <c-k> <Up>
 	inoremap <c-l> <Right>
+	inoremap <c-c> <Home>
 	inoremap <c-e> <End>
-	imap <c-x> <Plug>IMAP_JumpForward
+	imap <c-]> <Plug>IMAP_JumpForward
 		" IMAP_JumpForward uses c-j by default
 
 	" move cursor between the displayed lines instead of the physical lines
