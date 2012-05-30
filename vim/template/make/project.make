@@ -1,5 +1,5 @@
 # $File: project.make
-# $Date: Sat Mar 24 11:46:52 2012 +0800
+# $Date: Sat Apr 21 16:33:54 2012 +0800
 
 OBJ_DIR = obj
 TARGET = <++>
@@ -7,7 +7,7 @@ TARGET = <++>
 PKGCONFIG_LIBS = <++>
 INCLUDE_DIR = -Isrc/include -Isrc
 DEFINES = 
-CXXFLAGS = -Wall -Wextra  <++> \
+CXXFLAGS = -Wall -Wextra -Wnon-virtual-dtor <++> \
 		   $(shell pkg-config --cflags $(PKGCONFIG_LIBS)) $(INCLUDE_DIR) $(DEFINES) -O2
 LDFLAGS = <++> \
 		  $(shell pkg-config --libs $(PKGCONFIG_LIBS))

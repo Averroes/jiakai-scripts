@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: conf.py
-# $Date: Sat Feb 25 07:55:33 2012 +0800
+# $Date: Thu May 31 00:26:49 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 import re
@@ -15,5 +15,7 @@ COURSE_URL_REGEX = re.compile(r'^.*MultiLanguage/lesson/student/' \
 COURSE_NAME_REGEX = re.compile(r'^(.*)\([0-9]*\)\([^)]*\)$')
 
 DOWNLOAD_URL_REGEX = re.compile(r'^/uploadFile/downloadFile_student.jsp\?.*$')
+
+FILE_CHUNK_SIZE = 1024 * 1024 * 5
 
 del re

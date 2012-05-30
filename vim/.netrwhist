@@ -1,4 +1,11 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =2
-let g:netrw_dirhist_1='/home/jiakai/document/original/thu/2012-spring/assignment/CG/ray-tracing/src/include/bounders'
-let g:netrw_dirhist_2='/home/jiakai/document/original/thu/2012-spring/assignment/CG/ray-tracing/src/misc'
+let g:netrw_dirhist_cnt =9
+let g:netrw_dirhist_1='/home/jiakai/document/original/thu/2012-spring/assignment/CG/reading-report'
+let g:netrw_dirhist_2='/tmp/permanent/calc/ifx'
+let g:netrw_dirhist_3='/home/jiakai/document/original/thu/2012-spring/assignment/CG/ray-tracing/.git'
+let g:netrw_dirhist_4='/home/jiakai/document/original/thu/2012-spring/assignment/OOP/final/inpy/src/include'
+let g:netrw_dirhist_5='/tmp/permanent/calc/ifx'
+let g:netrw_dirhist_6='/home/jiakai/document/original/thu/2012-spring/assignment/OOP/final/inpy/src/include/ast'
+let g:netrw_dirhist_7='/home/jiakai/document/original/thu/2012-spring/assignment/OOP/final/inpy/tests'
+let g:netrw_dirhist_8='/home/jiakai/document/original/thu/2012-spring/assignment/OOP/final/inpy/src/include/ast'
+let g:netrw_dirhist_9='/home/jiakai/document/original/thu/2012-spring/summer-practice/scheme/ngo'

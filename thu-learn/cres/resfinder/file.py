@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: file.py
-# $Date: Sat Feb 25 07:49:16 2012 +0800
+# $Date: Thu May 31 00:38:35 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 __all__ = ['FileFinder']
@@ -60,8 +60,10 @@ class FileFinder(ResfinderBase):
 
         for i in links:
             resp = br.open(i.url)
-            self._download_file(resp, normalize_filename(i.text.strip() + '-' +
-                get_filename(resp)))
+            fname = normalize_filename(i.text.strip() + '-' +
+                    get_filename(resp))
+            logging.info(u'checking file {0} ...'.format(fname))
+            self._download_file(resp, fname)
 
     def _download_file(self, resp, fname):
         import os
@@ -75,15 +77,25 @@ class FileFinder(ResfinderBase):
             os.makedirs(fdir)
 
         fpath = os.path.join(fdir, fname)
-        if os.path.isfile(fpath):
+        if os.path.isfile(fpath) and os.stat(fpath).st_size == flen:
             return
         logging.info(u'downloading file {0} ...'.format(fname))
 
-        data = resp.read()
-        if flen != len(data):
-            raise ValueError(u'error while downloading {0}'.format(fname))
+        if flen > conf.FILE_CHUNK_SIZE:
+            fread = 0
+            with open(fpath, 'w') as f:
+                while fread < flen:
+                    data = resp.read(conf.FILE_CHUNK_SIZE)
+                    logging.info("{fname}: {0}/{1} {2:.2%}".format(fread, flen,
+                        float(fread) / flen, fname = fname))
+                    fread += len(data)
+                    f.write(data)
+        else:
+            data = resp.read()
+            if flen != len(data):
+                raise ValueError(u'error while downloading {0}'.format(fname))
+            with open(fpath, 'w') as f:
+                f.write(data)
 
-        with open(fpath, 'w') as f:
-            f.write(data)
         self._sumwrt(fname)
 
