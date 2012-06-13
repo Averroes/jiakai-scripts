@@ -1,5 +1,5 @@
 " $File: .vimrc
-" $Date: Sat May 26 23:25:17 2012 +0800
+" $Date: Tue Jun 05 15:12:21 2012 +0800
 " $Author: Jiakai <jia.kai66@gmail.com>
 "
 " Features:
@@ -96,10 +96,10 @@ if !exists("g:__vimrc__loaded__")
 	fun SetMakeGcc(compiler)
 		call ReadMakeflags()
 		compiler gcc
-		let &l:makeprg = a:compiler . " % -o %:r -Wall -Wextra -O2 -std=c++11" . b:makeflags
+		let &l:makeprg = a:compiler . " % -o %:r -Wall -Wextra -O2" . b:makeflags
 		let b:compiler = a:compiler
 
-		command! -buffer -nargs=* Makegdb call RunMake(b:compiler . " % -o %:r -std=c++11 -ggdb -Wall -Wextra -DDEBUG", <f-args>)
+		command! -buffer -nargs=* Makegdb call RunMake(b:compiler . " % -o %:r -ggdb -Wall -Wextra -DDEBUG", <f-args>)
 		command! -buffer -nargs=* Makepg call RunMake(b:compiler . " % -o %:r -pg -Wall -Wextra", <f-args>)
 		command! -buffer -nargs=* TryCompile call RunMake(b:compiler . " % -o /tmp/vim_try_compile -Wall -Wextra -c", <f-args>)
 	endfun
@@ -111,7 +111,7 @@ if !exists("g:__vimrc__loaded__")
 	endfun
 
 	autocmd FileType c call SetMakeGcc('gcc')
-	autocmd FileType cpp call SetMakeGcc('g++')
+	autocmd FileType cpp call SetMakeGcc('g++ -std=c++11')
 	autocmd FileType pascal call SetMakeFpc()
 	" make related end
 

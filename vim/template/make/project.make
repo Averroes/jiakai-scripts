@@ -1,35 +1,36 @@
 # $File: project.make
-# $Date: Sat Apr 21 16:33:54 2012 +0800
+# $Date: Thu Jun 07 23:44:08 2012 +0800
 
-OBJ_DIR = obj
+BUILD_DIR = build
 TARGET = <++>
 
 PKGCONFIG_LIBS = <++>
-INCLUDE_DIR = -Isrc/include -Isrc
+FILE_EXT = cc
 DEFINES = 
-CXXFLAGS = -Wall -Wextra -Wnon-virtual-dtor <++> \
-		   $(shell pkg-config --cflags $(PKGCONFIG_LIBS)) $(INCLUDE_DIR) $(DEFINES) -O2
-LDFLAGS = <++> \
-		  $(shell pkg-config --libs $(PKGCONFIG_LIBS))
+INCLUDE_DIR = -Isrc/include -Isrc
+override OPTFLAG ?= -O2
+
+CXXFLAGS = -Wall -Wextra -Wnon-virtual-dtor -Wno-unused-parameter -Winvalid-pch \
+		   $(INCLUDE_DIR) $(DEFINES) $(OPTFLAG) \
+		   $(shell pkg-config --cflags $(PKGCONFIG_LIBS)) 
+LDFLAGS = $(shell pkg-config --libs $(PKGCONFIG_LIBS))
 
 CXX = g++
-CXXSOURCES = $(shell find src -name "*.cpp")
-OBJS = $(addprefix $(OBJ_DIR)/,$(CXXSOURCES:.cpp=.o))
+CXXSOURCES = $(shell find src -name "*.$(FILE_EXT)")
+OBJS = $(addprefix $(BUILD_DIR)/,$(CXXSOURCES:.$(FILE_EXT)=.o))
 DEPFILES = $(OBJS:.o=.d)
 
 
-.PHONY: all clean run 
-
 all: $(TARGET)
 
-$(OBJ_DIR)/%.o: %.cpp
+$(BUILD_DIR)/%.o: %.$(FILE_EXT)
 	@echo "[cxx] $< ..."
 	@$(CXX) -c $< -o $@ $(CXXFLAGS)
 
-$(OBJ_DIR)/%.d: %.cpp
+$(BUILD_DIR)/%.d: %.$(FILE_EXT)
 	@mkdir -pv $(dir $@)
 	@echo "[dep] $< ..."
-	@$(CXX) $(INCLUDE_DIR) $(DEFINES) -MM -MT "$(OBJ_DIR)/$(<:.cpp=.o) $(OBJ_DIR)/$(<:.cpp=.d)" "$<"  > "$@"
+	@$(CXX) $(INCLUDE_DIR) $(DEFINES) -MM -MT "$@ $(@:.d=.o)" "$<"  > "$@"
 
 sinclude $(DEPFILES)
 
@@ -37,11 +38,19 @@ $(TARGET): $(OBJS)
 	@echo "Linking ..."
 	@$(CXX) $(OBJS) -o $@ $(LDFLAGS)
 
-
 clean:
-	rm -rf $(OBJ_DIR) $(TARGET)
+	rm -rf $(BUILD_DIR) $(TARGET)
 
 run: $(TARGET)
 	./$(TARGET)
+
+gdb: $(TARGET)
+	gdb $(TARGET)
+
+git:
+	git add -A
+	git commit -a
+
+.PHONY: all clean run gdb git
 
 # vim: ft=make
