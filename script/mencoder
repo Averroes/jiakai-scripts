@@ -1,0 +1,14 @@
+x264:
+	-ovc x264 -x264encopts threads=2:bitrate=500 -oac mp3lame -lameopts abr:br=52
+
+merge:
+	-oac copy -ovc copy -idx -o output.avi 
+
+note:
+	-ofps 25 -af channels=2 -vf scale=640:512 
+
+add audio:
+	-audiofile my_audio_file.mp3 my_mute_video.avi -o video_with_sound.avi -ovc copy -oac copy
+
+sync audio and video:
+	mencoder xxx -o xxx.avi -ofps <orig fps> && mencoder xxx.avi -o xxx-final.avi -ofps 25

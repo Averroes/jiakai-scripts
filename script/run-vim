@@ -1,0 +1,4 @@
+#!/bin/bash
+echo "$@" >> /tmp/run-vim-log
+sakura -e vim "$@" 2>/tmp/run-vim-log-stderr
+echo $? >> /tmp/run-vim-log

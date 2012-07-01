@@ -1,0 +1,1 @@
+ wget -T 3 -w 1 -t 3 -nc -p -k -np -r

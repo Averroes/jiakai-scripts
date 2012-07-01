@@ -1,8 +1,11 @@
 # src dst <is git?>
+# del: <target>
 ../thu-syllabus/syllabus.py thu-syllabus2ical.py
 ../thu-learn thu-learn 1
 $HOME/.vim vim
 $HOME/.vimrc vimrc
-$HOME/script/ncmsg
+$HOME/script
+
+del: script/net
 
 # vim: ft=conf

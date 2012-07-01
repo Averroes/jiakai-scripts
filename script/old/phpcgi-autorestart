@@ -1,0 +1,10 @@
+#!/bin/bash
+while [[ 1 ]]
+do
+	/usr/bin/php-cgi "$@"
+	if [[ "$?" != "0" ]]
+	then
+		echo "php-cgi failed. restarting."
+	fi
+done
+

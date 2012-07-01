@@ -1,0 +1,47 @@
+#!/bin/bash -e
+
+if [ `whoami` == "root" ]
+then
+	echo "You can not be root to run me."
+	exit
+fi
+
+## tcp-port to bind on
+FCGIPORT="8000"
+
+## IP to bind on
+FCGIADDR="127.0.0.1"
+
+## number of PHP children to spawn
+PHP_FCGI_CHILDREN=4
+
+## number of request before php-process will be restarted
+PHP_FCGI_MAX_REQUESTS=128
+
+# allowed environment variables sperated by spaces
+ALLOWED_ENV="ORACLE_HOME PATH USER"
+
+FCGI_WEB_SERVER_ADDRS="127.0.0.1"
+
+## if this script is run as root switch to the following user
+USERID=apache
+
+################## no config below this line
+
+ALLOWED_ENV="$ALLOWED_ENV PHP_FCGI_CHILDREN"
+ALLOWED_ENV="$ALLOWED_ENV PHP_FCGI_MAX_REQUESTS"
+ALLOWED_ENV="$ALLOWED_ENV FCGI_WEB_SERVER_ADDRS"
+
+EX="-q -b $FCGIADDR:$FCGIPORT"
+
+# copy the allowed environment variables
+E=""
+
+for i in $ALLOWED_ENV; do
+	E="$E $i=${!i}"
+done
+
+cp -fv ~/script/phpcgi-autorestart /tmp/
+chmod 6755 /tmp/phpcgi-autorestart
+# clean environment and set up a new one
+sudo -u $USERID env - $E /tmp/phpcgi-autorestart $EX & 
