@@ -6,6 +6,7 @@ $HOME/.vim vim
 $HOME/.vimrc vimrc
 $HOME/script
 ../vdisk.weibo-downloader.sh
+../ishare.downloader.sh
 
 del: script/net
 
