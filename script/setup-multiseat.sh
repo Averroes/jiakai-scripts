@@ -1,6 +1,6 @@
 #!/bin/bash -e
-# $File: start-multiseat.sh
-# $Date: Sun Jul 01 12:08:16 2012 +0800
+# $File: setup-multiseat.sh
+# $Date: Fri Jul 13 10:39:09 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 sudo -b Xephyr :2 \
