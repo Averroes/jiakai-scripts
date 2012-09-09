@@ -1,5 +1,5 @@
 " $File: .vimrc
-" $Date: Tue Jun 05 15:12:21 2012 +0800
+" $Date: Fri Aug 24 17:06:02 2012 +0800
 " $Author: Jiakai <jia.kai66@gmail.com>
 "
 " Features:
@@ -25,6 +25,7 @@ if !exists("g:__vimrc__loaded__")
 	set nocompatible
 
 	language en_US.UTF-8
+	let $LC_ALL = 'en_US.UTF-8'
 
 	" enable persistent-undo feature for vim 7.3
 	if has('persistent_undo')

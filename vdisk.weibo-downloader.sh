@@ -1,6 +1,6 @@
 #!/bin/bash -e
 # $File: vdisk.weibo-downloader.sh
-# $Date: Tue Aug 21 10:29:44 2012 +0800
+# $Date: Tue Aug 21 20:51:41 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 PYTHON=python2
@@ -43,5 +43,5 @@ read md5 url fn < $tmp
 
 wget -c --no-cookies --header "Cookie: $(cat $COOKIE)" -O "$fn" \
 	-o "/tmp/log.vdisk.wget.$(basename $1)" "$url" 
-echo "$md5 $fn" | md5sum --check
+echo "$md5 $fn" | md5sum --check || mv $fn /tmp/bad.$fn
 

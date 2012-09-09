@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: syllabus.py
-# $Date: Sun Feb 26 18:35:27 2012 +0800
+# $Date: Sat Sep 08 23:25:35 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 #
 # Copyright (C) 2012 Kai Jia <jia.kai66@gmail.com>
@@ -59,7 +59,7 @@ class CourseTime(object):
         for i, j in kargs.iteritems():
             self.__setattr__(i, j)
 
-    _special_week_re = re.compile(u'(第)?(.*)周$')
+    _special_week_re = re.compile(u'(第)?([0-9,]*)(周)*$')
     @classmethod
     def from_str(cls, val, course_start, course_end):
         """try to recognize course time from string *val* and return a list of
