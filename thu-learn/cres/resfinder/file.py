@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: file.py
-# $Date: Thu May 31 00:38:35 2012 +0800
+# $Date: Mon Sep 10 21:35:54 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 __all__ = ['FileFinder']
@@ -86,7 +86,7 @@ class FileFinder(ResfinderBase):
             with open(fpath, 'w') as f:
                 while fread < flen:
                     data = resp.read(conf.FILE_CHUNK_SIZE)
-                    logging.info("{fname}: {0}/{1} {2:.2%}".format(fread, flen,
+                    logging.info(u"{fname}: {0}/{1} {2:.2%}".format(fread, flen,
                         float(fread) / flen, fname = fname))
                     fread += len(data)
                     f.write(data)

@@ -1,10 +1,2 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =8
-let g:netrw_dirhist_1='/home/jiakai/programming/projects/vh-studio/backend/C-API/worker'
-let g:netrw_dirhist_2='/home/jiakai/programming/projects/vh-studio/frontend/facepp'
-let g:netrw_dirhist_3='/home/jiakai/programming/projects/vh-studio/frontend/facepp/utils'
-let g:netrw_dirhist_4='/home/jiakai/document/original/thu/2012-spring/assignment/parallel/heat/report/res/pplt/plot'
-let g:netrw_dirhist_5='/home/jiakai/programming/projects/vh-studio/frontend/facepp/website/__pycache__'
-let g:netrw_dirhist_6='/home/jiakai/programming/projects/vh-studio/frontend/facepp/cworker/api'
-let g:netrw_dirhist_7='/home/jiakai/programming/projects/vh-studio/frontend/facepp/fs/aliyun'
-let g:netrw_dirhist_8='/home/jiakai/programming/projects/vh-studio/frontend/facepp/config'
+let g:netrw_dirhist_cnt =0

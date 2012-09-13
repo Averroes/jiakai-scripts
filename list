@@ -9,5 +9,6 @@ $HOME/script
 ../ishare.downloader.sh
 
 del: script/net
+del: thu-learn/win-dist
 
 # vim: ft=conf
