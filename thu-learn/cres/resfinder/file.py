@@ -1,15 +1,20 @@
 # -*- coding: utf-8 -*-
 # $File: file.py
-# $Date: Mon Sep 10 21:35:54 2012 +0800
+# $Date: Sun Sep 16 20:44:18 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 __all__ = ['FileFinder']
 
+from cres.resfinder._base import ResfinderBase
+from cres.model import getsession
+from cres.model.files import Ignored
+from cres import conf
+
 import logging
 import re
 
-from cres.resfinder._base import ResfinderBase
-from cres import conf
+import os
+import os.path
 
 FNAME_REGEX = re.compile(r'^.*filename="(.*)"$')
 def get_filename(resp):
@@ -38,6 +43,13 @@ def normalize_filename(f):
         f = f[:pos] + f[pos:].lower()
     return f
 
+def size2str(s):
+    unit = ['', 'Ki', 'Mi', 'Gi']
+    p = 0
+    while s >= 1024 and p + 1 < len(unit):
+        s /= 1024.0
+        p += 1
+    return '{0:.2f}{1}b'.format(s, unit[p])
 
 class FileFinder(ResfinderBase):
     _NAME = u'课程文件'
@@ -66,8 +78,10 @@ class FileFinder(ResfinderBase):
             self._download_file(resp, fname)
 
     def _download_file(self, resp, fname):
-        import os
-        import os.path
+        ses = getsession()
+        if ses.query(Ignored).filter(Ignored.name == fname).count():
+            logging.info('canceled by user')
+            return
 
         flen = int(resp.info().getheader('Content-Length'))
         fdir = os.path.join(conf.OUTPUT_DIR,
@@ -81,15 +95,30 @@ class FileFinder(ResfinderBase):
             return
         logging.info(u'downloading file {0} ...'.format(fname))
 
+        if flen > conf.FILE_PROMPT_SIZE:
+            print u'***\nsize of "{0}" is {1}, still download? (y/n)'.\
+                    format(fname, size2str(flen))
+            while True:
+                r = raw_input()
+                if r not in ['y', 'n']:
+                    print 'Please enter y or n'
+                    continue
+                if r == 'y':
+                    break
+                ses.add(Ignored(name = fname))
+                ses.commit()
+                return
         if flen > conf.FILE_CHUNK_SIZE:
             fread = 0
             with open(fpath, 'w') as f:
                 while fread < flen:
                     data = resp.read(conf.FILE_CHUNK_SIZE)
-                    logging.info(u"{fname}: {0}/{1} {2:.2%}".format(fread, flen,
+                    logging.info(u"{fname}: {0}/{1} {2:.2%}".format(
+                        size2str(fread), size2str(flen),
                         float(fread) / flen, fname = fname))
                     fread += len(data)
                     f.write(data)
+                    del data
         else:
             data = resp.read()
             if flen != len(data):

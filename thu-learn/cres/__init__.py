@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: __init__.py
-# $Date: Sat Mar 24 12:17:08 2012 +0800
+# $Date: Sun Sep 16 21:00:27 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 __all__ = ['main']
@@ -185,8 +185,17 @@ def usage():
 def main():
     if len(sys.argv) == 1:
         usage()
-    conf.OUTPUT_DIR = sys.argv[1]
+    for enc in ['utf-8', 'gb2312']:
+        try:
+            conf.OUTPUT_DIR = sys.argv[1].decode(enc)
+        except UnicodeDecodeError:
+            pass
+    if not conf.OUTPUT_DIR:
+        sys.exit('unknown path encoding')
     init()
-    update_all_course(set(sys.argv[2:]))
+    try:
+        update_all_course(set(sys.argv[2:]))
+    except KeyboardInterrupt:
+        print 'Ctrl-C pressed, exit'
     additional_output()
 

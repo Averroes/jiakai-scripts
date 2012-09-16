@@ -1,30 +1,29 @@
 # $File: latex.make
-# $Date: Wed Jul 04 10:18:17 2012 +0800
+# $Date: Sun Sep 16 15:04:55 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 TARGET = <++>
 TEX = xelatex -shell-escape
-PDFDEPS = output $(addprefix output/,$(wildcard *.tex))
-
+PDFDEPS = build $(addprefix build/,$(wildcard *.tex))
 
 all: view
 
-output/$(TARGET).pdf: $(PDFDEPS)
-	cd output && $(TEX) $(TARGET).tex && $(TEX) $(TARGET).tex
+build/$(TARGET).pdf: $(PDFDEPS)
+	cd build && $(TEX) $(TARGET).tex && $(TEX) $(TARGET).tex
 
-output/%: %
-	[ -h $@ ] || ln -s ../$< output/
+build/%: %
+	[ -h $@ ] || ln -s ../$< build/
 
-output:
+build:
 	mkdir $@
 
-view: output/$(TARGET).pdf
-	evince output/$(TARGET).pdf
+view: build/$(TARGET).pdf
+	evince build/$(TARGET).pdf
 
-rebuild: clean output/$(TARGET).pdf
+rebuild: clean build/$(TARGET).pdf
 
 clean:
-	rm -rf output
+	rm -rf build
 
 .PHONY: all view clean rebuild
 

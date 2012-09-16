@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: conf.py
-# $Date: Thu May 31 00:26:49 2012 +0800
+# $Date: Sun Sep 16 21:01:00 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 import re
@@ -16,6 +16,9 @@ COURSE_NAME_REGEX = re.compile(r'^(.*)\([0-9]*\)\([^)]*\)$')
 
 DOWNLOAD_URL_REGEX = re.compile(r'^/uploadFile/downloadFile_student.jsp\?.*$')
 
-FILE_CHUNK_SIZE = 1024 * 1024 * 5
+FILE_CHUNK_SIZE = 1024000
+
+FILE_PROMPT_SIZE = 1024 * 1024 * 100
+# ask user whether to download if bigger than this
 
 del re
