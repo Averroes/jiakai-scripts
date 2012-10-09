@@ -1,5 +1,5 @@
 " $File: .vimrc
-" $Date: Fri Aug 24 17:06:02 2012 +0800
+" $Date: Thu Oct 04 16:13:20 2012 +0800
 " $Author: Jiakai <jia.kai66@gmail.com>
 "
 " Features:
@@ -112,7 +112,7 @@ if !exists("g:__vimrc__loaded__")
 	endfun
 
 	autocmd FileType c call SetMakeGcc('gcc')
-	autocmd FileType cpp call SetMakeGcc('g++ -std=c++11')
+	autocmd FileType cpp call SetMakeGcc('g++')
 	autocmd FileType pascal call SetMakeFpc()
 	" make related end
 

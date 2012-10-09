@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: file.py
-# $Date: Sun Sep 16 20:44:18 2012 +0800
+# $Date: Mon Sep 17 23:17:40 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 __all__ = ['FileFinder']
@@ -23,7 +23,7 @@ def get_filename(resp):
     if fname is None:
         raise ValueError('can not determine filename')
     fname = FNAME_REGEX.match(fname).group(1)
-    for enc in ['gb2312', 'utf-8']:
+    for enc in ['gb18030', 'utf-8']:
         try:
             return fname.decode(enc)
         except UnicodeDecodeError:
@@ -110,7 +110,7 @@ class FileFinder(ResfinderBase):
                 return
         if flen > conf.FILE_CHUNK_SIZE:
             fread = 0
-            with open(fpath, 'w') as f:
+            with open(fpath, 'wb') as f:
                 while fread < flen:
                     data = resp.read(conf.FILE_CHUNK_SIZE)
                     logging.info(u"{fname}: {0}/{1} {2:.2%}".format(
@@ -123,7 +123,7 @@ class FileFinder(ResfinderBase):
             data = resp.read()
             if flen != len(data):
                 raise ValueError(u'error while downloading {0}'.format(fname))
-            with open(fpath, 'w') as f:
+            with open(fpath, 'wb') as f:
                 f.write(data)
 
         self._sumwrt(fname)

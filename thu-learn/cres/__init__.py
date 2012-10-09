@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 # $File: __init__.py
-# $Date: Sun Sep 16 21:00:27 2012 +0800
+# $Date: Mon Sep 17 23:20:42 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 __all__ = ['main']
 
+import os
 import logging
 import sys
 import os.path
@@ -154,15 +155,18 @@ def update_all_course(ignore):
     print linesep
     sumwrt.output(sys.stdout)
     summary_output = os.path.join(conf.OUTPUT_DIR, 'summary.txt')
-    with open(summary_output, 'w') as f:
-        sumwrt.output(f, 'utf-8')
+    with open(summary_output, 'wb') as f:
+        if os.name == 'nt':
+            sumwrt.output(f, 'gb18030', '\r\n')
+        else:
+            sumwrt.output(f, 'utf-8')
     print linesep
     print u'总览已写入 ' + summary_output
 
 
 def additional_output():
     fpath = os.path.join(conf.OUTPUT_DIR, u'课程公告.html')
-    with open(fpath, 'w') as f:
+    with open(fpath, 'wb') as f:
         f.write(NotifyFinder.all2html())
     print u'课程公告已写入 ' + fpath
 
@@ -185,7 +189,7 @@ def usage():
 def main():
     if len(sys.argv) == 1:
         usage()
-    for enc in ['utf-8', 'gb2312']:
+    for enc in ['utf-8', 'gb18030']:
         try:
             conf.OUTPUT_DIR = sys.argv[1].decode(enc)
         except UnicodeDecodeError:

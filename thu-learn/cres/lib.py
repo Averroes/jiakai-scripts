@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: lib.py
-# $Date: Fri Feb 24 23:52:53 2012 +0800
+# $Date: Mon Sep 17 23:19:57 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 class SummaryWriter(object):
@@ -33,12 +33,12 @@ class SummaryWriter(object):
         ret._par = self
         return ret
 
-    def output(self, f, encoding = None):
+    def output(self, f, encoding = None, linebrk = '\n'):
         for i in self._lines:
             if encoding is not None:
                 i = i.encode(encoding)
             f.write(i)
-            f.write('\n')
+            f.write(linebrk)
 
 
 

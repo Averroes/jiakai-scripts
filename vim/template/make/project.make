@@ -1,5 +1,6 @@
 # $File: project.make
-# $Date: Sat Aug 18 15:06:20 2012 +0800
+# $Date: Wed Oct 03 14:55:50 2012 +0800
+# $Author: jiakai <jia.kai66@gmail.com>
 
 BUILD_DIR = build
 TARGET = <++>
