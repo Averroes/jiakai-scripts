@@ -1,3 +1,3 @@
 #!/bin/sh
-sudo ntpdate nist1-ny.ustiming.org
+sudo ntpdate 210.72.145.44
 # hwclock -w

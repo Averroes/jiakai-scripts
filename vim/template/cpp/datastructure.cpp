@@ -1,6 +1,6 @@
 /*
  * $File: datastructure.cpp
- * $Date: Sun Oct 07 21:04:44 2012 +0800
+ * $Date: Tue Oct 09 23:41:14 2012 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -13,6 +13,9 @@
 
 #define ITER_VECTOR_IDX(v, var) \
 	for (typeof((v).size()) var = 0; var < (v).size(); var ++)
+
+#define DECLARE_STATIC(var) \
+	__typeof__(var) var
 
 // f}}}
 
