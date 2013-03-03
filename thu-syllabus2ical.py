@@ -1,15 +1,19 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: syllabus.py
-# $Date: Mon Sep 17 08:55:44 2012 +0800
+# $Date: Sun Mar 03 20:36:11 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 #
-# Copyright (C) 2012 Kai Jia <jia.kai66@gmail.com>
+# Copyright (C) 2012, 2013 Kai Jia <jia.kai66@gmail.com>
 #
 # you can do ANYTHING you want with this program
 
+import sys
 import re
+import textwrap
+from hashlib import sha256
 from datetime import datetime, timedelta, date
+from collections import namedtuple
 
 from icalendar import Calendar, Event
 
@@ -17,17 +21,16 @@ def fix_icalendar():
     """fix some icalendar misbehaviour"""
     from icalendar import parser, prop
     def _foldline(text, lenght=75, newline='\r\n'):
-        import textwrap
         return newline.join(
                 i.encode('utf-8') for i in 
                 textwrap.wrap(text.decode('utf-8'), lenght,
                     subsequent_indent=' ',
-                    drop_whitespace=True,
-                    break_long_words=True
+                    drop_whitespace = True,
+                    break_long_words = True
                     )
                 )
     parser.foldline = _foldline
-    # a quick and dirty hack for utf-8 support
+    # a quick hack for utf-8 support
 
     def vdddt___init__(self, dt):
         from icalendar import Parameters
@@ -40,48 +43,48 @@ def fix_icalendar():
     prop.vDDDTypes.__init__ = vdddt___init__
     prop.vDDDTypes.to_ical = vdddt_to_ical
 
+CourseTimeRule = namedtuple('CourseTimeRule', ['first_week', 'step', 'count'])
 
 class CourseTime(object):
     time_start = None
     time_end = None
-    interval = None
+    step = None
     count = None
 
     _TIME2RRULE = {
-            # name: (<first week>, <interval>, <count>)
-            u'全周': (0, 1, 16),
-            u'前八周': (0, 1, 8),
-            u'后八周': (8, 1, 8),
-            u'单周': (0, 2, 8),
-            u'双周': (1, 2, 8),
+            u'全周': CourseTimeRule(0, 1, 16),
+            u'前八周': CourseTimeRule(0, 1, 8),
+            u'后八周': CourseTimeRule(8, 1, 8),
+            u'单周': CourseTimeRule(0, 2, 8),
+            u'双周': CourseTimeRule(1, 2, 8),
         }
     def __init__(self, **kargs):
         for i, j in kargs.iteritems():
             self.__setattr__(i, j)
 
-    _special_week_re = re.compile(u'(第)?([0-9,]*)(周)*$')
+    _special_week_re = re.compile(u'(第)?([0-9,]*)(周)+$')
     @classmethod
     def from_str(cls, val, course_start, course_end):
         """try to recognize course time from string *val* and return a list of
         :class:`CourseTime` instances, or return *None* on parse failure"""
 
         def mkcoursetime(rule):
-            td = timedelta(weeks = rule[0])
+            td = timedelta(weeks = rule.first_week)
             return CourseTime(
                     time_start = course_start + td,
                     time_end = course_end + td,
-                    interval = rule[1],
-                    count = rule[2],
-                    _week_start = rule[0]) # XXX
+                    step = rule.step,
+                    count = rule.count,
+                    week_start = rule.first_week)
 
         def mkrule(desc):
             """generate a rule from descriptions like a-b or c"""
             v = desc.strip().split('-')
             if len(v) == 1:
-                return (int(v[0]) - 1, 1, 1)
+                return CourseTimeRule(int(v[0]) - 1, 1, 1)
             else:
                 assert len(v) == 2
-                return (int(v[0]) - 1, 1, int(v[1]) - int(v[0]) + 1)
+                return CourseTimeRule(int(v[0]) - 1, 1, int(v[1]) - int(v[0]) + 1)
 
         rule = cls._TIME2RRULE.get(val)
 
@@ -107,15 +110,15 @@ class CourseTime(object):
         d = dict()
         d['count'] = self.count
         d['freq'] = 'WEEKLY'
-        d['interval'] = self.interval
+        d['interval'] = self.step
         return d
 
 
     def __str__(self):
         return u'CourseTime dump:\n' + u'\n'.join('{0}={1}'.format(i,
             str(self.__getattribute__(i)))
-            for i in ('time_start', 'time_end', 'interval', 'count',
-            '_week_start')) # XXX
+            for i in ('time_start', 'time_end', 'step', 'count',
+            'week_start'))
 
     __repr__ = __str__
 
@@ -128,11 +131,23 @@ class Course(object):
     time = None
     """a list of :class:`CourseTime` instances"""
 
+    _COURSE_TIME = (
+            ((8,  00), (9,  35)),
+            ((9,  50), (12, 15)),
+            ((13, 30), (15, 05)),
+            ((15, 20), (16, 55)),
+            ((17, 10), (18, 45)),
+            ((19, 20), (21, 45)),
+            )
+
     _data_re = re.compile(r'(.*)\(([^)]*)\)$')
-    def __init__(self, desc, course_start, course_end):
-        """*desc* is a description string from the XLS file.
-        *course_start* and *course_end* are two :class:`datetime` instances
-        indicating the start and end time of this course on the first week"""
+    def __init__(self, desc, first_day, num_in_day):
+        """initialize a course object from description and date information
+        :param desc: str, the description
+        :param first_day: datetime, the first day of the corresponding weekday
+            of this course in the semester
+        :param num_in_day: the number of this course in the day (range(6))"""
+        start_time, end_time = self._COURSE_TIME[num_in_day]
         match = self._data_re.match(desc)
         self.name = match.group(1)
         self.desc = desc
@@ -147,7 +162,17 @@ class Course(object):
                 break
 
         for i in items:
-            t = CourseTime.from_str(i, course_start, course_end)
+            if i.startswith(u'时间'):
+                s, t = i[2:].split('-')
+                start_time = map(int, s.split(':'))
+                end_time = map(int, t.split(':'))
+
+        start_time = first_day + timedelta(
+                hours = start_time[0], minutes = start_time[1])
+        end_time = first_day + timedelta(
+                hours = end_time[0], minutes = end_time[1])
+        for i in items:
+            t = CourseTime.from_str(i, start_time, end_time)
             if t is not None:
                 self.time = t
                 break
@@ -167,8 +192,7 @@ class Course(object):
         return False
 
     def mkevent(self):
-        """return a list of :class:`icalendar.Event` instances"""
-        from uuid import uuid4
+        """return a list of :class:`icalendar.Event` objects"""
         ret = list()
         for i in self.time:
             event = Event()
@@ -176,7 +200,8 @@ class Course(object):
             event.add('dtstamp', datetime.today())
             event.add('created', datetime.today())
             event.add('last-modified', datetime.today())
-            event.add('uid', str(uuid4()) + '@jk-thu-syllabus.py')
+            event.add('uid', sha256(self.name.encode('utf-8') +
+                str(i.time_start)).hexdigest())
             event.add('location', self.location)
             event.add('description', self.desc)
             event.add('transp', 'opaque')
@@ -185,10 +210,11 @@ class Course(object):
         return ret
 
     def __str__(self):
-        return u'\n  '.join(['Course dump:'] + [u'{0}={1}'.format(i,
-            self.__getattribute__(i)) for i in 'name', 'desc', 'location'] + 
-            ['time:\n    ' + u'\n    '.join(str(i).replace('\n', '\n      ')
-                for i in self.time)])
+        return u'\n  '.join(['Course dump:'] +
+                [u'{0}={1}'.format(i, getattr(self, i)) for i in
+                    'name', 'desc', 'location'] + 
+                ['time:\n    ' + u'\n    '.join(
+                    str(i).replace('\n', '\n      ') for i in self.time)])
 
     __repr__ = __str__
 
@@ -198,14 +224,6 @@ class FileParser(object):
     course = None
     """a list of :class:`Course` instances"""
 
-    _COURSE_TIME = (
-            ((8,  00), (9,  35)),
-            ((9,  50), (12, 15)),
-            ((13, 30), (15, 05)),
-            ((15, 20), (16, 55)),
-            ((17, 10), (18, 45)),
-            ((19, 20), (21, 45)),
-            )
     def __init__(self, fpath, first_day):
         """*first_day* is a :class:`datetime` instance indicating the first day
         of this semester, which must be Monday"""
@@ -217,16 +235,12 @@ class FileParser(object):
 
         self.course = list()
         for row in range(2, 8):
-            ct = self._COURSE_TIME[row - 2]
             for col in range(1, 8):
-                course_start = first_day + timedelta(
-                        days = col - 1, hours = ct[0][0], minutes = ct[0][1])
-                course_end = first_day + timedelta(
-                        days = col - 1, hours = ct[1][0], minutes = ct[1][1])
                 for desc in sheet.cell_value(row, col).split('\n'):
                     ds = desc.strip()
                     if ds:
-                        self.course.append(Course(ds, course_start, course_end))
+                        self.course.append(Course(ds, first_day +
+                            timedelta(days = col - 1), row - 2))
 
 
     def mkical(self):
@@ -234,24 +248,11 @@ class FileParser(object):
         cal.add('prodid', '-//thu syllabus to iCal//by jk//CST14')
         cal.add('version', '2.0')
         for i in self.course:
-            for j in i.mkevent():
-                cal.add_component(j)
+            map(cal.add_component, i.mkevent())
         return cal
 
 
-def print_license():
-    print """ This program is distributed in the hope that it will be useful,
- but absolutely WITHOUT ANY WARRANTY. The author is not responsible
- for any consequence caused by using this program or its output. \n"""
-
-    print "Do you accept the terms and want to continue?[y/n]",
-    import sys
-    if raw_input() != 'y':
-        sys.exit()
-
-
 def main():
-    import sys
     if len(sys.argv) != 6:
         sys.exit('usage: {0} <year> <month> <day> <XLS input file> ' \
                 '<iCal output file>'.format(sys.argv[0]))
@@ -259,12 +260,10 @@ def main():
     [year, month, day] = [int(i) for i in sys.argv[1:4]]
     assert date(year, month, day).weekday() == 0
 
-    print_license()
-
     fix_icalendar()
     fp = FileParser(sys.argv[4], datetime(year, month, day))
     for i in fp.course:
-        print unicode(i).encode('utf-8')
+        print unicode(i)
 
     with open(sys.argv[5], 'w') as fout:
         fout.write(fp.mkical().to_ical())

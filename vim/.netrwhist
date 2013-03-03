@@ -1,6 +1,4 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =4
-let g:netrw_dirhist_1='/home/jiakai/programming/projects/megvii/encrypted/backend/framework2.0/providence/cache'
-let g:netrw_dirhist_2='/home/jiakai/programming/projects/miscellaneous/domory/disk/dist/static'
-let g:netrw_dirhist_3='/home/jiakai/programming/projects/miscellaneous/domory/disk/.git'
-let g:netrw_dirhist_4='/etc/systemd/user'
+let g:netrw_dirhist_cnt =2
+let g:netrw_dirhist_1='/home/jiakai/programming/projects/megvii/encrypted/backend/framework2.0/providence/utils'
+let g:netrw_dirhist_2='/tmp/permanent'

@@ -1,4 +1,10 @@
 #!/bin/bash
-echo "$@" >> /tmp/run-vim-log
-sakura -e vim "$@" 2>/tmp/run-vim-log-stderr
-echo $? >> /tmp/run-vim-log
+# $File: run-vim
+# $Date: Wed Feb 13 15:51:11 2013 +0800
+# $Author: jiakai <jia.kai66@gmail.com>
+
+TERMINAL=roxterm
+
+args="$@"
+
+$TERMINAL -e tmux new-session "vim $args"
