@@ -1,5 +1,5 @@
 " $File: .vimrc
-" $Date: Sat Feb 02 10:37:03 2013 +0800
+" $Date: Wed Aug 14 14:11:48 2013 +0800
 " $Author: Jiakai <jia.kai66@gmail.com>
 "
 " Features:
@@ -21,6 +21,7 @@ let g:__vimrc__loaded__ = 1
 " script settings
 let s:MYHEADER_MAX_HEIGHT = 10
 let s:MAKEFLAGS_PAT = '^[^a-zA-Z]*\$MAKEFLAGS: \(.*\)$'
+let s:session_yank_file = "/tmp/permanent/vim_yank.txt"
 
 
 " Use Vim settings, rather then Vi settings (much better!).
@@ -117,7 +118,11 @@ endfun
 autocmd FileType c call SetMakeGcc('gcc')
 autocmd FileType cpp call SetMakeGcc('g++')
 autocmd FileType pascal call SetMakeFpc()
-" end of related-end functions
+
+" run make and open quick fix window
+command! -nargs=* Make call RunMake('make', <f-args>) | cwindow 3 | botright cwindow
+
+" end of make-related functions
 
 
 " execute current file
@@ -139,6 +144,8 @@ inoremap <c-c> <Home>
 inoremap <c-e> <End>
 inoremap <c-f> <Esc>lwi
 inoremap <c-b> <Esc>bi
+" jump to previous line (convenient for C code editing)
+inoremap <c-o> <Esc>O
 imap <c-]> <Plug>IMAP_JumpForward
 	" IMAP_JumpForward uses c-j by default
 
@@ -168,6 +175,9 @@ vnoremap p :let current_reg = @"gvs=current_reg
 
 " toggle gundo plugin
 nnoremap <F5> :GundoToggle<CR>
+
+" toggle NERDTree plugin
+nnoremap <F9> :NERDTreeToggle<CR>
 
 
 " ex command for toggling hex mode - define mapping if desired
@@ -209,5 +219,37 @@ function ToggleHex()
 	let &mod=l:modified
 	let &readonly=l:oldreadonly
 	let &modifiable=l:oldmodifiable
+endfunction
+
+" copy and paste between vim sessions
+" see http://vim.wikia.com/wiki/Copy_and_paste_between_Vim_instances
+map <silent> <Leader>y :call SessionYank()<CR>
+vmap <silent> <Leader>y y:call SessionYank()<CR>
+vmap <silent> <Leader>Y Y:call SessionYank()<CR>
+nmap <silent> <Leader>p :call SessionPaste("p")<CR>
+nmap <silent> <Leader>P :call SessionPaste("P")<CR>
+
+" search tags file to parent dirs
+set tags=./tags,tags;
+
+function SessionYank()
+  new
+  call setline(1, getregtype())
+  put
+  silent exec 'wq! ' . s:session_yank_file
+  exec 'bdelete ' . s:session_yank_file
+endfunction
+
+function SessionPaste(command)
+  silent exec 'sview ' . s:session_yank_file
+  let l:opt=getline(1)
+  silent 2,$yank
+  if (l:opt == 'v')
+    call setreg('"', strpart(@",0,strlen(@")-1), l:opt) " strip trailing endline ?
+  else
+    call setreg('"', @", l:opt)
+  endif
+  exec 'bdelete ' . s:session_yank_file
+  exec 'normal ' . a:command
 endfunction
 

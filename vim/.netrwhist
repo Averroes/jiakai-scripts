@@ -1,4 +1,8 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =2
-let g:netrw_dirhist_1='/home/jiakai/programming/projects/megvii/encrypted/backend/framework2.0/providence/utils'
-let g:netrw_dirhist_2='/tmp/permanent'
+let g:netrw_dirhist_cnt =6
+let g:netrw_dirhist_1='/home/jiakai/document/original/thu/2013-spring/assignment/storage/finj/src/syscall_list'
+let g:netrw_dirhist_2='/home/jiakai/.vim/bundle/gundo'
+let g:netrw_dirhist_3='/home/jiakai/document/original/tomboy/0'
+let g:netrw_dirhist_4='/home/jiakai/programming/projects/megvii/encrypted/degesi/src/include/classifier'
+let g:netrw_dirhist_5='/home/jiakai/programming/projects/megvii/encrypted/FaceDetection/degesi/src/misc'
+let g:netrw_dirhist_6='/home/jiakai/programming/projects/megvii/encrypted/FaceDetection/degesi/src/include/framework'

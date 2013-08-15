@@ -1,0 +1,6 @@
+cat:
+gs -q -sPAPERSIZE=letter -dNOPAUSE -dPDFSETTINGS=/printer -dBATCH -sDEVICE=pdfwrite -sOutputFile=output.pdf
+
+compress:
+ gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/printer -dNOPAUSE -dQUIET -dBATCH -sOutputFile=out1.pdf output.pdf
+

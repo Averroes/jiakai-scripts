@@ -1,6 +1,6 @@
 #!/bin/bash -e
 # $File: setup-display.sh
-# $Date: Mon Jan 14 14:01:51 2013 +0800
+# $Date: Sat Aug 03 22:01:57 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 LAPTOP=LVDS1

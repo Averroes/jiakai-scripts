@@ -1,6 +1,6 @@
 #!/bin/bash
 # $File: run-vim
-# $Date: Wed Feb 13 15:51:11 2013 +0800
+# $Date: Sun Mar 17 10:34:02 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 TERMINAL=roxterm

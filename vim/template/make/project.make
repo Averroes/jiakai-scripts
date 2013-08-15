@@ -1,5 +1,5 @@
 # $File: project.make
-# $Date: Mon Nov 26 23:40:03 2012 +0800
+# $Date: Mon Jun 03 11:27:18 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 BUILD_DIR = build
@@ -14,6 +14,7 @@ override OPTFLAG ?= -O2
 
 override CXXFLAGS += \
 	-Wall -Wextra -Wnon-virtual-dtor -Wno-unused-parameter -Winvalid-pch \
+	-Wno-unused-local-typedefs \
 	$(CPPFLAGS) $(OPTFLAG) \
 	$(shell pkg-config --cflags $(PKGCONFIG_LIBS)) 
 LDFLAGS = $(shell pkg-config --libs $(PKGCONFIG_LIBS))
