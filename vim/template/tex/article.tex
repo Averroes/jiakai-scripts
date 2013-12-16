@@ -1,21 +1,38 @@
 % $File: article.tex
-% $Date: Mon Aug 13 16:24:58 2012 +0800
+% $Date: Tue Nov 19 10:48:26 2013 +0800
 % $Author: jiakai <jia.kai66@gmail.com>
 
 \documentclass[a4paper]{article}
 \usepackage{amsmath,amssymb,amsthm,fontspec,zhspacing,verbatim,graphicx}
 \usepackage[hyperfootnotes=false,colorlinks,linkcolor=black,anchorcolor=black,citecolor=black]{hyperref}
+\usepackage[top=2in, bottom=1.5in, left=1in, right=1in]{geometry}
+
+\usepackage{biblatex}
+\bibliography{refs.bib}
+\defbibheading{bibliography}{\section{References}}
+
+\newcommand{\addplot}[1]{\begin{center}
+	\includegraphics[width=0.6\paperwidth]{#1}
+\end{center}}
+
+% \textref{marker}{text}
+\newcommand{\textref}[2]{\hyperref[#1]{#2}}
+\newcommand{\figref}[1]{\hyperref[fig:#1]{Figure~\ref*{fig:#1}}}
+\newcommand{\eqnref}[1]{\hyperref[eqn:#1]{(\ref*{eqn:#1})}}
+\newcommand{\lemref}[1]{\hyperref[lemma:#1]{Lemma~\ref*{lemma:#1}}}
+
 
 \zhspacing
 
 \title{<++>}
-\author{清华大学\\计14 ~ 贾开\\<jia.kai66@gmail.com>}
+\author{清华大学\\计14~贾开\\<jia.kai66@gmail.com>}
 \date{\today}
 
 \begin{document}
 \maketitle
 \newpage
 
+\printbibliography
 \end{document}
 
 % vim: filetype=tex foldmethod=marker foldmarker=f{{{,f}}}

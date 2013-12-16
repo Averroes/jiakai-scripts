@@ -1,0 +1,17 @@
+#!/bin/bash
+# $File: tex2pdf
+# $Date: Wed Oct 02 15:07:46 2013 +0800
+# $Author: jiakai <jia.kai66@gmail.com>
+
+src=$1
+
+if [ -z "$src" ]
+then
+	echo "usage: $0 <xelatex source>"
+	exit -1
+fi
+
+latexmk -latex=xelatex -shell-escape $src
+latexmk -c
+
+# vim: ft=sh

@@ -1,0 +1,17 @@
+#!/bin/bash -e
+# $File: runjava
+# $Date: Thu Aug 22 14:16:06 2013 +0800
+# $Author: jiakai <jia.kai66@gmail.com>
+
+src=$1
+
+if [ -z "$src" ]
+then
+	echo "usage: $0 <java source>"
+	exit -1
+fi
+
+classname=${src/.java/}
+javac -Xlint $src
+java $classname
+rm -f $classname.class

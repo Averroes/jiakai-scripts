@@ -1,0 +1,15 @@
+#!/bin/bash
+# $File: pandoc2pdf
+# $Date: Sun Aug 18 14:58:53 2013 +0800
+# $Author: jiakai <jia.kai66@gmail.com>
+
+fname=$1
+if [ -z "$fname" ]
+then
+	echo "usage: $0 <input filename>"
+	exit -1
+fi
+
+pandoc "$fname" --latex-engine=xelatex -o "${fname%.*}.pdf"
+
+# vim: ft=sh

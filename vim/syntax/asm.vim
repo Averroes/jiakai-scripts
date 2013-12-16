@@ -23,7 +23,7 @@ syn keyword gasDirective	.cfi_lsda .cfi_def_cfa .cfi_def_cfa_register .cfi_def_c
 syn keyword gasDirective	.cfi_adjust_cfa_offset .cfi_offset .cfi_rel_offset .cfi_register
 syn keyword gasDirective	.cfi_restore .cfi_undefined .cfi_same_value .cfi_remember_state
 syn keyword gasDirective	.cfi_return_column .cfi_signal_frame .cfi_window_save .cfi_escape
-syn keyword gasDirective	.cfi_val_encoded_addr .data .def .desc .dim .eject
+syn keyword gasDirective	.cfi_val_encoded_addr .data .def .desc .dim .eject .rodata
 syn keyword gasDirective	.else .elseif .endef .endif .equ .equiv .eqv .err
 syn keyword gasDirective	.error .exitm .extern .fail .file .fill .global .globl
 syn keyword gasDirective	.gnu_attribute .hidden .ident .if .incbin .include .internal
@@ -1891,6 +1891,9 @@ let b:current_syntax = "gas"
 
 syn sync ccomment
 syn sync linebreaks=1
+
+set comments=sl:/*,mb:\ *,elx:\ */
+set formatoptions+=r
 
 " vim: ts=8 sw=8 :
 

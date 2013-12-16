@@ -1,5 +1,5 @@
 " $File: .vimrc
-" $Date: Wed Aug 14 14:11:48 2013 +0800
+" $Date: Sat Oct 19 11:16:02 2013 +0800
 " $Author: Jiakai <jia.kai66@gmail.com>
 "
 " Features:
@@ -118,6 +118,8 @@ endfun
 autocmd FileType c call SetMakeGcc('gcc')
 autocmd FileType cpp call SetMakeGcc('g++')
 autocmd FileType pascal call SetMakeFpc()
+autocmd FileType java let &l:makeprg = '~/script/runjava %'
+autocmd FileType tex let &l:makeprg = 'tex2pdf %'
 
 " run make and open quick fix window
 command! -nargs=* Make call RunMake('make', <f-args>) | cwindow 3 | botright cwindow
@@ -169,6 +171,7 @@ set nobackup
 set title
 set ruler
 set wildmenu
+set formatoptions+=ro
 
 " Make p in Visual mode replace the selected text with the "" register.
 vnoremap p :let current_reg = @"gvs=current_reg
@@ -253,3 +256,38 @@ function SessionPaste(command)
   exec 'normal ' . a:command
 endfunction
 
+" If you prefer the Omni-Completion tip window to close when a selection is
+" " made, these lines close it on movement in insert mode or when leaving
+" " insert mode
+autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+
+" Highlight all instances of word under cursor, when idle.
+" Useful when studying strange source code.
+" Type z/ to toggle highlighting on/off.
+nnoremap z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
+function! AutoHighlightToggle()
+  let @/ = ''
+  if exists('#auto_highlight')
+    au! auto_highlight
+    augroup! auto_highlight
+    setl updatetime=4000
+    echo 'Highlight current word: off'
+    return 0
+  else
+    augroup auto_highlight
+      au!
+      au CursorHold * let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>'
+    augroup end
+    setl updatetime=100
+    echo 'Highlight current word: ON'
+    return 1
+  endif
+endfunction
+
+
+" search raw string
+command! -nargs=1 S let @/ = escape('<args>', '\')
+nmap <Leader>S :execute(":S " . input('Regex-off: /'))<CR>
+
+let g:EclimCompletionMethod = 'omnifunc'

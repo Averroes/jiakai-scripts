@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: __init__.py
-# $Date: Mon Sep 17 23:20:42 2012 +0800
+# $Date: Thu Oct 31 19:51:22 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 __all__ = ['main']
@@ -9,6 +9,7 @@ import os
 import logging
 import sys
 import os.path
+import traceback
 
 import mechanize
 
@@ -133,21 +134,25 @@ def update_all_course(ignore):
     courses = Course.from_browser(br)
     sumwrt = SummaryWriter()
     for i in courses:
-        if i.id in ignore:
-            logging.warn(u'course {0} is ignored'.format(i.name))
-            continue
+        try:
+            if i.id in ignore:
+                logging.warn(u'course {0} is ignored'.format(i.name))
+                continue
 
-        res_list = list()
-        for j in range(len(RESFINDER_LIST)):
-            if '{0}.{1}'.format(i.id, j) in ignore:
-                logging.warn(u'resource finder {0} for ' \
-                        'course {1} is ignored'.format(
-                            RESFINDER_LIST[j].__name__, i.name))
-            else:
-                res_list.append(RESFINDER_LIST[j])
+            res_list = list()
+            for j in range(len(RESFINDER_LIST)):
+                if '{0}.{1}'.format(i.id, j) in ignore:
+                    logging.warn(u'resource finder {0} for ' \
+                            'course {1} is ignored'.format(
+                                RESFINDER_LIST[j].__name__, i.name))
+                else:
+                    res_list.append(RESFINDER_LIST[j])
 
-        logging.info(u'getting updates for course {0} ...'.format(i.name))
-        i.update(br, sumwrt.indent(u'{0}-{1}:'.format(i.id, i.name)), res_list)
+            logging.info(u'getting updates for course {0} ...'.format(i.name))
+            i.update(br, sumwrt.indent(u'{0}-{1}:'.format(i.id, i.name)), res_list)
+        except Exception as exc:
+            print >>sys.stderr,  u'failed to update course: {}\n{}'.format(
+                    exc, traceback.format_exc())
 
 
     print u'总览：'
