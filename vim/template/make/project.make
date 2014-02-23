@@ -1,9 +1,10 @@
 # $File: project.make
-# $Date: Mon Jun 03 11:27:18 2013 +0800
+# $Date: Tue Dec 17 14:12:57 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 BUILD_DIR = build
 TARGET = <++>
+ARGS = <++>
 
 CXX = g++
 
@@ -13,6 +14,7 @@ CPPFLAGS = -Isrc
 override OPTFLAG ?= -O2
 
 override CXXFLAGS += \
+	-ggdb \
 	-Wall -Wextra -Wnon-virtual-dtor -Wno-unused-parameter -Winvalid-pch \
 	-Wno-unused-local-typedefs \
 	$(CPPFLAGS) $(OPTFLAG) \
@@ -45,10 +47,11 @@ clean:
 	rm -rf $(BUILD_DIR) $(TARGET)
 
 run: $(TARGET)
-	./$(TARGET)
+	./$(TARGET) $(ARGS)
 
-gdb: $(TARGET)
-	gdb $(TARGET)
+gdb: 
+	OPTFLAG=-O0 make -j4
+	gdb --args $(TARGET) $(ARGS)
 
 git:
 	git add -A

@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: syllabus.py
-# $Date: Sun Mar 03 20:36:11 2013 +0800
+# $Date: Sun Feb 23 21:17:18 2014 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 #
 # Copyright (C) 2012, 2013 Kai Jia <jia.kai66@gmail.com>
@@ -47,9 +47,18 @@ CourseTimeRule = namedtuple('CourseTimeRule', ['first_week', 'step', 'count'])
 
 class CourseTime(object):
     time_start = None
+    """absolute start time of first class of this course"""
+
     time_end = None
+    """absolute end time of first class of this course"""
+
     step = None
+    """week step"""
     count = None
+    """week count"""
+
+    week_start = None
+    """week of first class of this course, starting from 0"""
 
     _TIME2RRULE = {
             u'全周': CourseTimeRule(0, 1, 16),
@@ -62,7 +71,7 @@ class CourseTime(object):
         for i, j in kargs.iteritems():
             self.__setattr__(i, j)
 
-    _special_week_re = re.compile(u'(第)?([0-9,]*)(周)+$')
+    _special_week_re = re.compile(u'(第)?([0-9,-]*)(周)+$')
     @classmethod
     def from_str(cls, val, course_start, course_end):
         """try to recognize course time from string *val* and return a list of
@@ -84,7 +93,8 @@ class CourseTime(object):
                 return CourseTimeRule(int(v[0]) - 1, 1, 1)
             else:
                 assert len(v) == 2
-                return CourseTimeRule(int(v[0]) - 1, 1, int(v[1]) - int(v[0]) + 1)
+                return CourseTimeRule(
+                    int(v[0]) - 1, 1, int(v[1]) - int(v[0]) + 1)
 
         rule = cls._TIME2RRULE.get(val)
 
@@ -178,7 +188,8 @@ class Course(object):
                 break
 
         if self.time is None:
-            raise ValueError(u'无法解析课程时间：{0}'.format(desc))
+            raise ValueError(u'无法解析课程时间：{0}'.format(
+                desc).encode('utf-8'))
 
 
 
