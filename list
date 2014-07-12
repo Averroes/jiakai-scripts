@@ -10,6 +10,6 @@ $HOME/script
 
 del: script/net
 del: thu-learn/win-dist
-del: vim/bundle/YouCompleteMe
+del: vim/bundle
 
 # vim: ft=conf
