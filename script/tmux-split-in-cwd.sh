@@ -1,21 +1,12 @@
 #!/bin/bash
+# $File: tmux-split-in-cwd.sh
+# $Date: Tue Feb 25 20:43:13 2014 +0800
+# $Author: jiakai <jia.kai66@gmail.com>
+
 # tmux-split-in-cwd - open a new shell with same cwd as calling pane
 
-SIP=$(tmux display-message -p "#S:#I:#P")
-PTY=$(tmux server-info |
-        egrep flags=\|bytes |
-        awk '/windows/ { s = $2 }
-             /references/ { i = $1 }
-             /bytes/ { print s i $1 $2 } ' |
-        grep "$SIP" |
-        cut -d: -f4)
-PTS=${PTY#/dev/}
-PIDs=$(ps -eao pid,tty | tac | awk '$2 == "'$PTS'" {print $1}')
-for i in $PIDs
-do
-	DIR=$(readlink /proc/$i/cwd)
-	[ -n "$DIR" ] && break
-done
+PID=$(tmux  display-message -p '#{pane_pid}')
+DIR=$(readlink /proc/$PID/cwd)
 
 case "$1" in
   h) tmux splitw -h "cd '$DIR'; $SHELL"
@@ -25,3 +16,4 @@ case "$1" in
   *) tmux neww "cd '$DIR'; $SHELL"
      ;;
 esac
+

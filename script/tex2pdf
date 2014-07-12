@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/bash -e
 # $File: tex2pdf
-# $Date: Wed Oct 02 15:07:46 2013 +0800
+# $Date: Tue Apr 22 10:41:43 2014 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 src=$1
@@ -11,7 +11,9 @@ then
 	exit -1
 fi
 
-latexmk -latex=xelatex -shell-escape $src
+latexmk --8bit -xelatex -shell-escape $src
 latexmk -c
+
+evince ${src%.tex}.pdf
 
 # vim: ft=sh

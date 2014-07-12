@@ -1,27 +1,47 @@
 % $File: article.tex
-% $Date: Tue Nov 19 10:48:26 2013 +0800
+% $Date: Mon Jun 02 16:38:52 2014 +0800
 % $Author: jiakai <jia.kai66@gmail.com>
 
 \documentclass[a4paper]{article}
-\usepackage{amsmath,amssymb,amsthm,fontspec,zhspacing,verbatim,graphicx}
+\usepackage{amsmath,amssymb,amsthm,fontspec,verbatim,graphicx}
 \usepackage[hyperfootnotes=false,colorlinks,linkcolor=black,anchorcolor=black,citecolor=black]{hyperref}
 \usepackage[top=2in, bottom=1.5in, left=1in, right=1in]{geometry}
+ 
+\newcommand{\addplot}[1]{\begin{center}
+	\includegraphics[width=0.6\paperwidth,height=0.2\paperheight,keepaspectratio]{#1}
+\end{center}}
 
+% minted
+% \inputmintedConfigured[additional minted options]{lang}{file path}
+\usepackage{minted}
+\newcommand{\inputmintedConfigured}[3][]{\inputminted[fontsize=\scriptsize,
+	label=#3,linenos,frame=lines,framesep=0.8em,tabsize=4,#1]{#2}{#3}}
+% \*src[additional minted options]{file path}
+\newcommand{\cppsrc}[2][]{\inputmintedConfigured[#1]{cpp}{#2}}
+
+% bib 
 \usepackage{biblatex}
 \bibliography{refs.bib}
 \defbibheading{bibliography}{\section{References}}
 
-\newcommand{\addplot}[1]{\begin{center}
-	\includegraphics[width=0.6\paperwidth]{#1}
-\end{center}}
+% math
+\usepackage{bm}
+\newcommand{\trans}[1]{#1^\intercal}
+\numberwithin{equation}{section}
+\renewcommand{\vec}[1]{\boldsymbol{#1}}
+\newcommand{\dif}{\mathrm{d}}
+\usepackage{mathtools}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclareMathOperator*{\argmin}{arg\,min}
 
 % \textref{marker}{text}
 \newcommand{\textref}[2]{\hyperref[#1]{#2}}
-\newcommand{\figref}[1]{\hyperref[fig:#1]{Figure~\ref*{fig:#1}}}
+\newcommand{\figref}[1]{\hyperref[fig:#1]{\figurename~\ref*{fig:#1}}}
 \newcommand{\eqnref}[1]{\hyperref[eqn:#1]{(\ref*{eqn:#1})}}
 \newcommand{\lemref}[1]{\hyperref[lemma:#1]{Lemma~\ref*{lemma:#1}}}
 
-
+% zhspacing
+\usepackage{zhspacing}
 \zhspacing
 
 \title{<++>}
@@ -35,4 +55,4 @@
 \printbibliography
 \end{document}
 
-% vim: filetype=tex foldmethod=marker foldmarker=f{{{,f}}}
+% vim: filetype=tex foldmethod=marker foldmarker=f{{{,f}}} spell spelllang=en

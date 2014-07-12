@@ -1,18 +1,15 @@
 # $File: latex.make
-# $Date: Mon Nov 18 14:27:22 2013 +0800
+# $Date: Tue Apr 08 16:01:13 2014 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 TARGET = <++>
-TEX = xelatex -shell-escape
-BIBTEX = bibtex
 PDFDEPS = build $(addprefix build/,$(wildcard *.tex)) \
 		  $(addprefix build/,$(wildcard *.bib))
 
 all: view
 
 build/$(TARGET).pdf: $(PDFDEPS)
-	cd build && $(TEX) $(TARGET).tex && $(BIBTEX) $(TARGET).aux && \
-		$(TEX) $(TARGET).tex && $(TEX) $(TARGET).tex
+	cd build && latexmk -xelatex -8bit -shell-escape $(TARGET).tex
 
 build/%: %
 	[ -h $@ ] || ln -s ../$< build/

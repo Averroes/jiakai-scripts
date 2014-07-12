@@ -1,5 +1,5 @@
 " use space instead of tab to indent python sources
-fun SetupCoffeeEnv()
+fun! SetupCoffeeEnv()
 	set expandtab
 	set textwidth=79
 	"set tabstop=2

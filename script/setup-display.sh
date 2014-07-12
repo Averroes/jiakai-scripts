@@ -1,16 +1,20 @@
 #!/bin/bash -e
 # $File: setup-display.sh
-# $Date: Sat Aug 03 22:01:57 2013 +0800
+# $Date: Sat Jul 12 15:32:45 2014 -0700
 # $Author: jiakai <jia.kai66@gmail.com>
 
-LAPTOP=LVDS1
-SCREEN=VGA1
+screen_num=0
 
-mode=$(xrandr -q | awk '/VGA1/ {getline; print $0; }')
-
-[ -z "$mode" ] && exit
-
-mode=$(echo $mode | cut -d' ' -f 1)
-
-xrandr --output "$LAPTOP" --mode 1366x768
-xrandr --output "$SCREEN" --mode $mode --right-of "$LAPTOP"
+xrandr -q | awk '/ connected/ {printf "%s ", $1; getline; print $1}' | \
+	while read device mode
+	do
+		if [ "$screen_num" -eq 0 ]
+		then
+			basic=$device
+			xrandr --output "$device" --mode $mode
+		else
+			xrandr --output "$device" --mode $mode --right-of "$basic"
+			break
+		fi
+		screen_num=$(($screen_num + 1))
+	done

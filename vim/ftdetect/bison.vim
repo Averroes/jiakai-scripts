@@ -1,5 +1,5 @@
 let g:yacc_uses_cpp=1
-fun BisonSetup()
+fun! BisonSetup()
 	set indentkeys=0{,0},:,0#,!^F,o,O,e
 	set indentexpr=
 	set cindent

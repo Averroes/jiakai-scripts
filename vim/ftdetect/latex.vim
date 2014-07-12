@@ -1,5 +1,5 @@
 autocmd filetype plaintex set ft=tex
-fun Latex_settings()
+fun! Latex_settings()
 	set grepprg=grep\ -nH\ $*
 	let g:tex_flavor='latex'
 	let g:Tex_CompileRule_pdf='xelatex --interaction=nonstopmode $*'

@@ -1,5 +1,5 @@
 " use space instead of tab to indent python sources
-fun SetupPythonEnv()
+fun! SetupPythonEnv()
 	set expandtab
 	set textwidth=79
 

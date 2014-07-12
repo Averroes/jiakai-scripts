@@ -1,5 +1,5 @@
 " $File: .vimrc
-" $Date: Sat Oct 19 11:16:02 2013 +0800
+" $Date: Sun Mar 30 21:15:09 2014 +0800
 " $Author: Jiakai <jia.kai66@gmail.com>
 "
 " Features:
@@ -22,7 +22,6 @@ let g:__vimrc__loaded__ = 1
 let s:MYHEADER_MAX_HEIGHT = 10
 let s:MAKEFLAGS_PAT = '^[^a-zA-Z]*\$MAKEFLAGS: \(.*\)$'
 let s:session_yank_file = "/tmp/permanent/vim_yank.txt"
-
 
 " Use Vim settings, rather then Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
@@ -116,7 +115,7 @@ fun SetMakeFpc()
 endfun
 
 autocmd FileType c call SetMakeGcc('gcc')
-autocmd FileType cpp call SetMakeGcc('g++')
+autocmd FileType cpp call SetMakeGcc('g++ -std=c++11')
 autocmd FileType pascal call SetMakeFpc()
 autocmd FileType java let &l:makeprg = '~/script/runjava %'
 autocmd FileType tex let &l:makeprg = 'tex2pdf %'
@@ -149,7 +148,7 @@ inoremap <c-b> <Esc>bi
 " jump to previous line (convenient for C code editing)
 inoremap <c-o> <Esc>O
 imap <c-]> <Plug>IMAP_JumpForward
-	" IMAP_JumpForward uses c-j by default
+" IMAP_JumpForward uses c-j by default
 
 " move cursor between the displayed lines instead of the physical lines
 noremap  <silent> k gk
@@ -167,7 +166,8 @@ set shiftwidth=4
 set softtabstop=4
 set tabstop=4
 set fileencodings=utf-8,gb2312,gbk,iso-8859,ucs-bom
-set nobackup
+set backup
+set backupdir=/tmp
 set title
 set ruler
 set wildmenu
@@ -232,7 +232,7 @@ vmap <silent> <Leader>Y Y:call SessionYank()<CR>
 nmap <silent> <Leader>p :call SessionPaste("p")<CR>
 nmap <silent> <Leader>P :call SessionPaste("P")<CR>
 
-" search tags file to parent dirs
+" search tags file in parent dirs
 set tags=./tags,tags;
 
 function SessionYank()
@@ -290,4 +290,13 @@ endfunction
 command! -nargs=1 S let @/ = escape('<args>', '\')
 nmap <Leader>S :execute(":S " . input('Regex-off: /'))<CR>
 
+" invoke omni completion by pressing ctrl+/ (ctrl+/ is recognized as C-_)
+inoremap <unique> <C-_> <C-X><C-O><C-P>
+
+" various settings for plugins
 let g:EclimCompletionMethod = 'omnifunc'
+
+" force ycm recompile by pressing F7
+nmap <F7> :YcmForceCompileAndDiagnostics<CR>
+inoremap <F7> <ESC>:YcmForceCompileAndDiagnostics<CR>i
+
